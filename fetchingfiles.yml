@@ -1,0 +1,24 @@
+jobs:
+ - job: A
+   pool:
+    vmImage: 'ubuntu-latest'
+   steps:
+   - checkout: valuefile
+     persistCredentials: true
+   - task: PowerShell@2
+     displayName: 'Fetching FileNames'
+     inputs:
+       targetType: 'inline'
+       script: |
+         Write-Host "Fetching filenames"
+         cd $(valuepath)
+         Write-Host $(valuepath)
+         ##Listing files in the directory and saving them in an array
+         $a=ls
+         Write-Host "Files:"$a
+         $List = $a | foreach {'$(valuepath)/' + $_}
+         Write-Host "Files with complete path:"$List
+         $b = '"{0}"' -f ($List -join '","')
+         Write-Host $b    ####Output is: "$(valuepath)/file1.yml, $(valuepath)/file2.yml"
+         Write-Host "##vso[task.setvariable variable=valuefiles;isOutput=true]$b"
+     name: fileoutput

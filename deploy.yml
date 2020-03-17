@@ -1,0 +1,24 @@
+parameters:
+  files: []
+jobs:
+- job: B
+  dependsOn: A
+  pool:
+    vmImage: 'ubuntu-latest'  
+  variables:
+    filenames: ${{ parameters.files }}  
+  steps:  
+  - checkout: valuefile
+    persistCredentials: true
+  - task: AzureCLI@2
+    inputs:
+      #azureSubscription: 'mysubscription'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        echo "fetching filenames"
+        echo $(filenames)   ####Error: output is empty
+        for i in $(echo $(filenames) | sed "s/,/ /g");  ###it doesn't run this line as it seems it can not find $(filename)
+        do 
+          echo "valuefiles= $i"; 
+        done
