@@ -12,7 +12,7 @@ jobs:
     persistCredentials: true
   - task: AzureCLI@2
     inputs:
-      #azureSubscription: 'mysubscription'
+      azureSubscription: 'azurecapra'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
